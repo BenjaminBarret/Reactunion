@@ -8,8 +8,9 @@ import useColorScheme from '../hooks/useColorScheme';
 import HomeScreen from '../screens/HomeScreen';
 import ArticleDetailScreen from '../screens/ArticleDetailScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, HomeParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, FavoriteParamList, HomeParamList, TabTwoParamList } from '../types';
 import SearchScreen from '../screens/SearchScreen';
+import FavoriteScreen from '../screens/FavoriteScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -21,10 +22,10 @@ export default function BottomTabNavigator() {
       initialRouteName="Home"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="Home"
+        name="Accueil"
         component={HomeNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="ios-home" color={color} size={25} />,
         }}
       />
       <BottomTab.Screen
@@ -32,6 +33,13 @@ export default function BottomTabNavigator() {
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Favoris"
+        component={FavoriteNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <Ionicons name="ios-heart" color={color} size={25} />,
         }}
       />
     </BottomTab.Navigator>
@@ -83,3 +91,24 @@ function TabTwoNavigator() {
     </TabTwoStack.Navigator>
   );
 }
+
+const FavoriteStack = createStackNavigator<FavoriteParamList>();
+
+function FavoriteNavigator() {
+  return (
+    <FavoriteStack.Navigator>
+      <FavoriteStack.Screen
+        name="FavoriteScreen"
+        component={FavoriteScreen}
+        options={{ headerTitle: 'Enregistrés' }}
+      />
+      <HomeStack.Screen
+        name="ArticleDetailScreen"
+        component={ArticleDetailScreen}
+        options={{ headerTitle: 'Article enregistré' }}
+      />
+    </FavoriteStack.Navigator>
+  );
+}
+
+

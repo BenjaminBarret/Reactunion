@@ -7,6 +7,7 @@ import { Text, View } from '../components/Themed';
 import { getArticlesWithSearchedText, SimilarArticle, Article, getArticlesInTheSpotlight } from '../api/ZactusAPI'
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
+import ArticleList from './ArticleList';
 
 class Search extends React.Component {
 
@@ -84,29 +85,17 @@ class Search extends React.Component {
 
     if (this.searchedText != undefined && this.searchedText.length > 0) {
       return (
-        <FlatList
-          data={this.state.articlesSearched}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => 
-            <ArticleCard 
-            article={item} 
-            isArticleFavorite={(this.props.favoritesArticle.findIndex(article => article.id === item.id) !== -1) ? true : false}
-            displayDetailArticle={this._displayDetailArticle}/>
-          }
-        />
+        <ArticleList
+          articles={this.state.articlesSearched} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
+          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
+         />
       )
     } else {
       return (
-        <FlatList
-          data={this.state.articlesSpotlight}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => 
-          <ArticleCard 
-            article={item} 
-            isArticleFavorite={(this.props.favoritesArticle.findIndex(article => article.id === item.id) !== -1) ? true : false}
-            displayDetailArticle={this._displayDetailArticle}/>
-          }
-        />
+        <ArticleList
+          articles={this.state.articlesSpotlight} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
+          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
+         />
       )
     }
 
@@ -171,7 +160,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: { favoritesArticle: any; }) => {
   return {
     favoritesArticle: state.favoritesArticle
   }

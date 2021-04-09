@@ -18,6 +18,11 @@ export default {
               TabTwoScreen: 'two',
             },
           },
+          Favorite: {
+            screens: {
+              FavoriteScreen: 'favorite',
+            },
+          },
         },
       },
       NotFound: '*',
