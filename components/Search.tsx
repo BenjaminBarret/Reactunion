@@ -6,6 +6,7 @@ import { Text, View } from '../components/Themed';
 
 import { getArticlesWithSearchedText, SimilarArticle, Article, getArticlesInTheSpotlight } from '../api/ZactusAPI'
 import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux';
 
 class Search extends React.Component {
 
@@ -86,7 +87,12 @@ class Search extends React.Component {
         <FlatList
           data={this.state.articlesSearched}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => <ArticleCard article={item} displayDetailArticle={this._displayDetailArticle}/>}
+          renderItem={({item}) => 
+            <ArticleCard 
+            article={item} 
+            isArticleFavorite={(this.props.favoritesArticle.findIndex(article => article.id === item.id) !== -1) ? true : false}
+            displayDetailArticle={this._displayDetailArticle}/>
+          }
         />
       )
     } else {
@@ -94,7 +100,12 @@ class Search extends React.Component {
         <FlatList
           data={this.state.articlesSpotlight}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => <ArticleCard article={item} displayDetailArticle={this._displayDetailArticle}/>}
+          renderItem={({item}) => 
+          <ArticleCard 
+            article={item} 
+            isArticleFavorite={(this.props.favoritesArticle.findIndex(article => article.id === item.id) !== -1) ? true : false}
+            displayDetailArticle={this._displayDetailArticle}/>
+          }
         />
       )
     }
@@ -160,4 +171,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Search
+const mapStateToProps = state => {
+  return {
+    favoritesArticle: state.favoritesArticle
+  }
+}
+
+export default connect(mapStateToProps)(Search)

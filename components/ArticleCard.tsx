@@ -1,8 +1,26 @@
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, Image } from 'react-native'
 import { Button, Card, Icon } from 'react-native-elements'
 
 class ArticleCard extends React.Component {
+
+  constructor(props: {} | Readonly<{}>) {
+    super(props)
+
+  }
+
+  _displayFavoriteImage() {
+    if (this.props.isArticleFavorite) {
+      // Si la props isFilmFavorite vaut true, on affiche le 🖤
+      return (
+        <Image
+          style={styles.favorite_image}
+          source={require('../assets/images/ic_favorite.png')}
+        />
+      )
+    }
+  }
+
   
   render() {
 
@@ -26,6 +44,7 @@ class ArticleCard extends React.Component {
           numberOfLines={3}>
             {article.description}
         </Text>
+        {this._displayFavoriteImage()}
         <Button
           // icon={<Icon name='code' color='#ffffff' />}
           buttonStyle={styles.button}
@@ -49,6 +68,11 @@ const styles = StyleSheet.create({
     marginRight: 0, 
     marginBottom: 0
   },
+  favorite_image: {
+    width: 25,
+    height: 25,
+    marginRight: 5
+  }
   // main_container: {
   //   height: 190
   // },

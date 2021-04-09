@@ -1,8 +1,10 @@
 import moment from 'moment';
 import * as React from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Image, Linking} from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Image, Linking, TouchableOpacity} from 'react-native';
 import { Button } from 'react-native-elements';
 import { getArticleWithId } from '../api/ZactusAPI';
+
+import { connect } from 'react-redux'
 
 import { Text, View } from '../components/Themed';
 
@@ -25,6 +27,25 @@ class ArticleDetail extends React.Component {
         isLoading: false
       })
     })
+  }
+
+  _toggleFavorite() {
+    const action = { type: "TOGGLE_FAVORITE", value: this.state.article }
+    this.props.dispatch(action)
+  }
+
+  _displayFavoriteImage() {
+    var sourceImage = require('../assets/images/ic_favorite_border.png')
+    if (this.props.favoritesArticle.findIndex(item => item.id === this.state.article.id) !== -1) {
+      // Film dans nos favoris
+      sourceImage = require('../assets/images/ic_favorite.png')
+    }
+    return (
+      <Image
+        style={styles.favorite_image}
+        source={sourceImage}
+      />
+    )
   }
 
   _displayLoading() {
@@ -57,6 +78,11 @@ class ArticleDetail extends React.Component {
           <Text style={styles.title_text}>{article.title}</Text>
           <Text style={styles.default_text}>Paru le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
           <Text style={styles.default_text}>Categorie : {article.category}</Text>
+          <TouchableOpacity
+            style={styles.favorite_container}
+            onPress={() => this._toggleFavorite()}>
+            {this._displayFavoriteImage()}
+          </TouchableOpacity>
           <Text style={styles.description_text}>{article.description}</Text>
           <Button
           // icon={<Icon name='code' color='#ffffff' />}
@@ -73,6 +99,7 @@ class ArticleDetail extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <View style={styles.main_container}>
         {this._displayLoading()}
@@ -85,6 +112,13 @@ class ArticleDetail extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1
+  },
+  favorite_container: {
+    alignItems: 'center', // Alignement des components enfants sur l'axe secondaire, X ici
+  },
+  favorite_image: {
+    width: 40,
+    height: 40
   },
   loading_container: {
     position: 'absolute',
@@ -132,5 +166,11 @@ const styles = StyleSheet.create({
     marginBottom: 0
   },
 })
-  
-  export default ArticleDetail
+
+const mapStateToProps = (state: any) => {
+  return {
+    favoritesArticle: state.favoritesArticle
+  }
+}
+
+export default connect(mapStateToProps)(ArticleDetail)
