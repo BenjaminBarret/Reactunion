@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, FlatList } from 'react-native'
 import { connect } from 'react-redux'
+import Navigation from '../navigation'
 import ArticleCard from './ArticleCard'
 
 class ArticleList extends React.Component {
@@ -15,7 +16,7 @@ class ArticleList extends React.Component {
   // 
   _displayDetailArticle = (idArticle : string) => {
     console.log("Display film with id " + idArticle)
-    this.props.navigation.navigate("ArticleDetailScreen", { idArticle: idArticle})
+    this.props.navigation.navigate("ArticleDetailScreen", { idArticle: idArticle })
   }
 
   render() {

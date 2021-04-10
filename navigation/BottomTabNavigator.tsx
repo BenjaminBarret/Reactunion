@@ -11,6 +11,7 @@ import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, FavoriteParamList, HomeParamList, TabTwoParamList } from '../types';
 import SearchScreen from '../screens/SearchScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
+import { Button } from 'react-native';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -72,7 +73,16 @@ function HomeNavigator() {
       <HomeStack.Screen
         name="SearchScreen"
         component={SearchScreen}
-        options={{ headerTitle: 'Recherche' }}
+        options={{ 
+          headerTitle: 'Recherche',
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="#fff"
+            />
+          ) 
+        }}
       />
     </HomeStack.Navigator>
   );
@@ -86,7 +96,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Test' }}
       />
     </TabTwoStack.Navigator>
   );
@@ -105,7 +115,7 @@ function FavoriteNavigator() {
       <HomeStack.Screen
         name="ArticleDetailScreen"
         component={ArticleDetailScreen}
-        options={{ headerTitle: 'Article enregistré' }}
+        options={{ headerTitle: 'Article' }}
       />
     </FavoriteStack.Navigator>
   );

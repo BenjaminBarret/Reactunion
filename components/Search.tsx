@@ -86,15 +86,15 @@ class Search extends React.Component {
     if (this.searchedText != undefined && this.searchedText.length > 0) {
       return (
         <ArticleList
-          articles={this.state.articlesSearched} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
-          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
+          articles={this.state.articlesSearched} // C'est bien le component Search qui récupère les articles depuis l'API et on les transmet ici pour que le component ArticleList les affiche
+          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component ArticleList de naviguer vers le détail d'un article
          />
       )
     } else {
       return (
         <ArticleList
-          articles={this.state.articlesSpotlight} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
-          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
+          articles={this.state.articlesSpotlight} // C'est bien le component Search qui récupère les articles depuis l'API et on les transmet ici pour que le component ArticleList les affiche
+          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component ArticleList de naviguer vers le détail d'un article
          />
       )
     }

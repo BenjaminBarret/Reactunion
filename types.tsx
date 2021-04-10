@@ -4,9 +4,10 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  Home: undefined;
+  Home: undefined,
+  Accueil: undefined;
   TabTwo: undefined;
-  Favorite: undefined;
+  Favoris: undefined;
 };
 
 export type HomeParamList = {

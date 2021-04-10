@@ -1,6 +1,6 @@
 import moment from 'moment';
 import * as React from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Image, Linking, TouchableOpacity} from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Image, Linking, TouchableOpacity, Platform, Share} from 'react-native';
 import { Button } from 'react-native-elements';
 import { getArticleWithId } from '../api/ZactusAPI';
 
@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { Text, View } from '../components/Themed';
 
 class ArticleDetail extends React.Component {
-
+  
   constructor(props: {} | Readonly<{}>) {
     super(props)
 
@@ -17,15 +17,42 @@ class ArticleDetail extends React.Component {
       article: undefined,
       isLoading: true 
     }
+    this._shareArticle = this._shareArticle.bind(this)
   }
 
+  // static navigationOptions = ({ navigation }) => {
+  //   const { params } = navigation.state
+  //   // On accède à la fonction shareFilm et au film via les paramètres qu'on a ajouté à la navigation
+  //   if (params.article != undefined && Platform.OS === 'ios') {
+  //     return {
+  //         // On a besoin d'afficher une image, il faut donc passe par une Touchable une fois de plus
+  //         headerRight: <TouchableOpacity
+  //                         style={styles.share_touchable_headerrightbutton}
+  //                         onPress={() => params._shareArticle()}>
+  //                         <Image
+  //                           style={styles.share_image}
+  //                           source={require('../assets/images/ic_share.ios.png')} />
+  //                       </TouchableOpacity>
+  //     }
+  //   }
+  // }
+
+  // _updateNavigationParams() {
+  //   console.log()
+  //   this.props.navigation.setParams({
+  //     shareArticle: this._shareArticle,
+  //     article: this.state.article
+  //   })
+  // }
 
   componentDidMount() {
     getArticleWithId(this.props.idArticle).then(data => {
       this.setState({
         article: data[0],
         isLoading: false
-      })
+      }
+      // , () => { this._updateNavigationParams() }
+      )
     })
   }
 
@@ -76,13 +103,24 @@ class ArticleDetail extends React.Component {
             source={{uri:article.picture}}
           />
           <Text style={styles.title_text}>{article.title}</Text>
-          <Text style={styles.default_text}>Paru le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
-          <Text style={styles.default_text}>Categorie : {article.category}</Text>
-          <TouchableOpacity
-            style={styles.favorite_container}
-            onPress={() => this._toggleFavorite()}>
-            {this._displayFavoriteImage()}
-          </TouchableOpacity>
+          <View style={styles.details_container}>
+            <View>
+              <Text style={styles.default_text}>Paru le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
+              <Text style={styles.default_text}>Categorie : {article.category}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.favorite_container}
+              onPress={() => this._toggleFavorite()}>
+              {this._displayFavoriteImage()}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.share_touchable_headerrightbutton}
+              onPress={() => this._shareArticle()}>
+              <Image
+                style={styles.share_image}
+                source={require('../assets/images/ic_share.ios.png')} />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.description_text}>{article.description}</Text>
           <Button
           // icon={<Icon name='code' color='#ffffff' />}
@@ -98,12 +136,33 @@ class ArticleDetail extends React.Component {
     }
   }
 
+  _shareArticle() {
+      const { article } = this.state
+      Share.share({ title: article.title, message: article.description })
+  }
+
+  _displayFloatingActionButton() {
+    const { article } = this.state
+    if (article != undefined && Platform.OS === 'android') { // Uniquement sur Android et lorsque le film est chargé
+      return (
+        <TouchableOpacity
+          style={styles.share_touchable_floatingactionbutton}
+          onPress={() => this._shareArticle()}>
+          <Image
+            style={styles.share_image}
+            source={require('../assets/images/ic_share.android.png')} />
+        </TouchableOpacity>
+      )
+    }
+  }
+
   render() {
     console.log(this.props)
     return (
       <View style={styles.main_container}>
         {this._displayLoading()}
         {this._displayArticle()}
+        {this._displayFloatingActionButton()}
       </View>
     )
   }
@@ -112,6 +171,11 @@ class ArticleDetail extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     flex: 1
+  },
+  details_container:{
+    flexDirection:'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   favorite_container: {
     alignItems: 'center', // Alignement des components enfants sur l'axe secondaire, X ici
@@ -164,6 +228,24 @@ const styles = StyleSheet.create({
     marginLeft: 0, 
     marginRight: 0, 
     marginBottom: 0
+  },
+  share_touchable_floatingactionbutton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
+    right: 30,
+    bottom: 30,
+    borderRadius: 30,
+    backgroundColor: '#e91e63',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  share_image: {
+    width: 30,
+    height: 30
+  },
+  share_touchable_headerrightbutton: {
+    marginRight: 8
   },
 })
 
