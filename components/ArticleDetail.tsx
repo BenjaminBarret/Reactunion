@@ -7,6 +7,8 @@ import { getArticleWithId } from '../api/ZactusAPI';
 import { connect } from 'react-redux'
 
 import { Text, View } from '../components/Themed';
+import EnlargeShrink from '../animations/EnlargeShrink';
+import { Ionicons } from '@expo/vector-icons';
 
 class ArticleDetail extends React.Component {
   
@@ -63,15 +65,20 @@ class ArticleDetail extends React.Component {
 
   _displayFavoriteImage() {
     var sourceImage = require('../assets/images/ic_favorite_border.png')
+    var shouldEnlarge = false
     if (this.props.favoritesArticle.findIndex(item => item.id === this.state.article.id) !== -1) {
       // Film dans nos favoris
       sourceImage = require('../assets/images/ic_favorite.png')
+      shouldEnlarge = true
     }
     return (
-      <Image
-        style={styles.favorite_image}
-        source={sourceImage}
-      />
+      <EnlargeShrink
+        shouldEnlarge={shouldEnlarge}>
+        <Image
+          style={styles.favorite_image}
+          source={sourceImage}
+        />
+      </EnlargeShrink>
     )
   }
 
@@ -116,9 +123,7 @@ class ArticleDetail extends React.Component {
             <TouchableOpacity
               style={styles.share_touchable_headerrightbutton}
               onPress={() => this._shareArticle()}>
-              <Image
-                style={styles.share_image}
-                source={require('../assets/images/ic_share.ios.png')} />
+              <Ionicons name="share" size={40} />
             </TouchableOpacity>
           </View>
           <Text style={styles.description_text}>{article.description}</Text>
@@ -181,8 +186,9 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Alignement des components enfants sur l'axe secondaire, X ici
   },
   favorite_image: {
-    width: 40,
-    height: 40
+    flex:1,
+    width: null,
+    height: null
   },
   loading_container: {
     position: 'absolute',

@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, Image } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, Image, Animated, Dimensions } from 'react-native'
 import { Button, Card, Icon } from 'react-native-elements'
+import FadeIn from '../animations/FadeIn'
 
 class ArticleCard extends React.Component {
 
@@ -31,26 +32,27 @@ class ArticleCard extends React.Component {
     }
 
     return (
-      // implemented with Text and Button as children
-      <Card containerStyle={{padding: 10}} >
-        <Card.Title>{article.title}</Card.Title>
-        <Card.Divider/>
-        <Card.Image
-          source={{uri:article.picture}} 
-          PlaceholderContent={<ActivityIndicator />}>
-        </Card.Image>
-        <Text 
-          style={styles.description} 
-          numberOfLines={3}>
-            {article.description}
-        </Text>
-        {this._displayFavoriteImage()}
-        <Button
-          // icon={<Icon name='code' color='#ffffff' />}
-          buttonStyle={styles.button}
-          title='Lire plus ...' 
-          onPress={() => displayDetailArticle(article.id)}/>
-      </Card>
+      <FadeIn>
+        <Card containerStyle={{padding: 10}} >
+          <Card.Title>{article.title}</Card.Title>
+          <Card.Divider/>
+          <Card.Image
+            source={{uri:article.picture}} 
+            PlaceholderContent={<ActivityIndicator />}>
+          </Card.Image>
+          <Text 
+            style={styles.description} 
+            numberOfLines={3}>
+              {article.description}
+          </Text>
+          {this._displayFavoriteImage()}
+          <Button
+            // icon={<Icon name='code' color='#ffffff' />}
+            buttonStyle={styles.button}
+            title='Lire plus ...' 
+            onPress={() => displayDetailArticle(article.id)}/>
+        </Card>
+      </FadeIn>
       // <View style={styles.main_container}>
       //   <Text style={styles.title_text}>Titre de l'article</Text>
       // </View>
