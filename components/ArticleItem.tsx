@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, View, Text, ActivityIndicator, Image, Animated, Dimensions } from 'react-native'
 import { Button, Card, Icon } from 'react-native-elements'
@@ -12,7 +13,7 @@ interface Props {
 interface State {
 }
 
-class ArticleCard extends React.Component<Props,State> {
+class ArticleItem extends React.Component<Props,State> {
 
   constructor(props: Props) {
     super(props)
@@ -23,10 +24,7 @@ class ArticleCard extends React.Component<Props,State> {
     if (this.props.isArticleFavorite) {
       // Si la props isFilmFavorite vaut true, on affiche le 🖤
       return (
-        <Image
-          style={styles.favorite_image}
-          source={require('../assets/images/ic_favorite.png')}
-        />
+        <Ionicons name='heart' color='#ffffff80' size={100}/>
       )
     }
   }
@@ -47,14 +45,16 @@ class ArticleCard extends React.Component<Props,State> {
           <Card.Divider/>
           <Card.Image
             source={{uri:article.picture}} 
-            PlaceholderContent={<ActivityIndicator />}>
+            PlaceholderContent={<ActivityIndicator />}
+            style={styles.image}>
+              {this._displayFavoriteImage()}
           </Card.Image>
           <Text 
             style={styles.description} 
             numberOfLines={3}>
               {article.description}
           </Text>
-          {this._displayFavoriteImage()}
+          
           <Button
             // icon={<Icon name='code' color='#ffffff' />}
             buttonStyle={styles.button}
@@ -62,9 +62,6 @@ class ArticleCard extends React.Component<Props,State> {
             onPress={() => displayDetailArticle(article.id)}/>
         </Card>
       </FadeIn>
-      // <View style={styles.main_container}>
-      //   <Text style={styles.title_text}>Titre de l'article</Text>
-      // </View>
     )
   }
 }
@@ -83,13 +80,12 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     marginRight: 5
+  },
+  image:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
-  // main_container: {
-  //   height: 190
-  // },
-  // title_text: {
-    
-  // }
 })
 
-export default ArticleCard
+export default ArticleItem

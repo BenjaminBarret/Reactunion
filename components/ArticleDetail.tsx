@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 import { Text, View } from '../components/Themed';
 import EnlargeShrink from '../animations/EnlargeShrink';
 import { Ionicons } from '@expo/vector-icons';
+import articleReducer from '../Store/Reducers/ArticleReducer';
+import SimilarArticleList from './SimilarArticleList';
 
 interface Props {
   idArticle: any;
@@ -104,6 +106,16 @@ class ArticleDetail extends React.Component<Props, State> {
     }
   }
 
+  _displaySimilarArticle() {
+    if (this.state.article.similar_article) {
+      return (
+        <SimilarArticleList
+        similar_article={this.state.article.similar_article} // C'est bien le component Search qui récupère les articles depuis l'API et on les transmet ici pour que le component ArticleList les affiche
+        />
+      )
+    }
+  }
+
   _displayArticle() {
 
     const { article } = this.state
@@ -133,6 +145,7 @@ class ArticleDetail extends React.Component<Props, State> {
               <View style={styles.categ_published_container}>
                 <Text style={styles.default_text}>Categorie : {article.category}</Text>
                 <Text style={styles.default_text}>Publié le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
+                <Text style={styles.default_text}>Par {article.actor}</Text>
               </View>
               <TouchableOpacity
                 style={styles.favorite_container}
@@ -148,14 +161,12 @@ class ArticleDetail extends React.Component<Props, State> {
             <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
             <Text style={styles.description_text}>{article.description}</Text>
             <Button
-            // icon={<Icon name='code' color='#ffffff' />}
+            icon={<Ionicons name='link' color='#ffffff' size={30}/>}
             buttonStyle={styles.button}
-            title='Lire tout l&apos;article...'  
+            title=' Lire tout l&apos;article'  
             onPress={() => Linking.openURL(article.link)}/>
-            {/* <Text style={styles.default_text}>Article(s) similaire(s) : {article.genres.map(function(similarArticle){
-                return similarArticle.title;
-              }).join(" / ")}
-            </Text> */}
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            {this._displaySimilarArticle()}
           </View>
         </View>
       )
@@ -232,8 +243,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 300,
-    borderBottomLeftRadius: 37,
-    borderBottomRightRadius: 37,
+    borderBottomLeftRadius: 42,
+    borderBottomRightRadius: 42,
   },
   title_text: {
     fontWeight: 'bold',
@@ -242,15 +253,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginLeft: 5,
     marginRight: 5,
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
     color: '#000000',
     textAlign: 'center'
   },
   description_text: {
-    fontStyle: 'italic',
     color: '#667',
     flex:1,
+    fontSize: 21,
     flexWrap: 'wrap',
     marginBottom: 15,
     marginTop: 15,

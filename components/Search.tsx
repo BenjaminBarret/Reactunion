@@ -12,7 +12,6 @@ interface Props {
 }
 
 interface State {
-  articlesSpotlight:any;
   articlesSearched:any;
   isLoading:any;
 }
@@ -27,7 +26,6 @@ class Search extends React.Component<Props,State> {
     
     this.searchedText;
     this.state = { 
-      articlesSpotlight : [],
       articlesSearched : [],
       isLoading : false
     }
@@ -38,24 +36,6 @@ class Search extends React.Component<Props,State> {
   _displayDetailArticle = (idArticle : string) => {
     console.log("Display film with id " + idArticle)
     this.props.navigation.navigate("ArticleDetailScreen", { idArticle: idArticle, navigation : this.props.navigation})
-  }
-
-  // Charge la liste d'articles à la une
-  _loadArticlesInTheSpotlight(){
-    this.setState({ isLoading: true })
-
-      getArticlesInTheSpotlight().then(data => {
-        this.setState({ 
-          articlesSpotlight: data,
-          isLoading: false
-        })
-      });
-
-  }
-
-  // Charge l'actu à lancement du component
-  componentDidMount(){
-    this._loadArticlesInTheSpotlight();
   }
 
   // Recherche les articles à partir du texte
@@ -100,10 +80,11 @@ class Search extends React.Component<Props,State> {
       )
     } else {
       return (
-        <ArticleList
-          articles={this.state.articlesSpotlight} // C'est bien le component Search qui récupère les articles depuis l'API et on les transmet ici pour que le component ArticleList les affiche
-          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component ArticleList de naviguer vers le détail d'un article
-         />
+        <View style={styles.main_container}>
+          <Text style={styles.title}>Faites une recherche</Text>
+          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+          <Text style={styles.text}>Saississez un texte dans le champ de recherche.</Text>
+        </View>
       )
     }
 
@@ -124,6 +105,7 @@ class Search extends React.Component<Props,State> {
           onSubmitEditing={() => 
             this._loadArticlesSearched()
           }
+          clearButtonMode="always"
         />
 
         <Button
@@ -142,6 +124,11 @@ class Search extends React.Component<Props,State> {
 }
 
 const styles = StyleSheet.create({
+  main_container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container:{
     flex: 1,
     marginTop: 12,
@@ -165,7 +152,21 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+  text: {
+    fontSize: 17,
+    lineHeight: 24,
+    textAlign: 'center',
+  },
 })
 
 const mapStateToProps = (state: { favoritesArticle: any; }) => {

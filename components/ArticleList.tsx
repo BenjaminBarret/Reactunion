@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import Navigation from '../navigation'
-import ArticleCard from './ArticleCard'
+import ArticleItem from './ArticleItem'
 
 interface Props {
   navigation: any;
@@ -37,7 +37,7 @@ class ArticleList extends React.Component<Props, State> {
         extraData={this.props.favoritesArticle}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({item}) => 
-          <ArticleCard 
+          <ArticleItem 
           article={item} 
           isArticleFavorite={(this.props.favoritesArticle.findIndex((article: { id: any }) => article.id === item.id) !== -1) ? true : false}
           displayDetailArticle={this._displayDetailArticle}/>

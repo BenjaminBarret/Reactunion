@@ -8,8 +8,7 @@ import { HomeParamList } from '../types';
 
 export default function ArticleDetailScreen({ route } : any) {
 
-  const { idArticle, navigation } = route.params;
-
+  const { idArticle } = route.params;
   return (
     <ArticleDetail idArticle={idArticle}/>
   );
