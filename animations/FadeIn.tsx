@@ -1,9 +1,16 @@
 import React from 'react'
 import { Animated, Dimensions } from 'react-native'
 
-class FadeIn extends React.Component {
+interface Props {
+}
 
-  constructor(props: {} | Readonly<{}>) {
+interface State {
+  positionLeft: any;
+}
+
+class FadeIn extends React.Component<Props, State> {
+
+  constructor(props: Props) {
     super(props)
     this.state = {
       positionLeft: new Animated.Value(Dimensions.get('window').width)
@@ -14,7 +21,8 @@ class FadeIn extends React.Component {
     Animated.spring(
       this.state.positionLeft,
       {
-        toValue: 0
+        toValue: 0,
+        useNativeDriver: false,
       }
     ).start()
   }

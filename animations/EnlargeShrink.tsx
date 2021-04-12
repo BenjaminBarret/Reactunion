@@ -1,9 +1,17 @@
 import React from 'react'
 import { Animated } from 'react-native'
 
-class EnlargeShrink extends React.Component {
+interface Props {
+  shouldEnlarge: any;
+}
 
-  constructor(props: {} | Readonly<{}>) {
+interface State {
+  viewSize: any;
+}
+
+class EnlargeShrink extends React.Component<Props, State> {
+
+  constructor(props: Props) {
     super(props)
     this.state = {
       viewSize: new Animated.Value(this._getSize())
@@ -12,7 +20,7 @@ class EnlargeShrink extends React.Component {
 
   _getSize() {
     if (this.props.shouldEnlarge) {
-      return 60
+      return 50
     }
     return 40
   }
@@ -21,7 +29,8 @@ class EnlargeShrink extends React.Component {
     Animated.spring(
       this.state.viewSize,
       {
-        toValue: this._getSize()
+        toValue: this._getSize(),
+        useNativeDriver: false,
       }
     ).start()
   }

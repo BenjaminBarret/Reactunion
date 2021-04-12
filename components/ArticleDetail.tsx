@@ -10,9 +10,20 @@ import { Text, View } from '../components/Themed';
 import EnlargeShrink from '../animations/EnlargeShrink';
 import { Ionicons } from '@expo/vector-icons';
 
-class ArticleDetail extends React.Component {
+interface Props {
+  idArticle: any;
+  favoritesArticle: any;
+  dispatch: any;
+}
+
+interface State {
+  article: any;
+  isLoading: any;
+}
+
+class ArticleDetail extends React.Component<Props, State> {
   
-  constructor(props: {} | Readonly<{}>) {
+  constructor(props: Props) {
     super(props)
 
     this.state = {
@@ -66,7 +77,7 @@ class ArticleDetail extends React.Component {
   _displayFavoriteImage() {
     var sourceImage = require('../assets/images/ic_favorite_border.png')
     var shouldEnlarge = false
-    if (this.props.favoritesArticle.findIndex(item => item.id === this.state.article.id) !== -1) {
+    if (this.props.favoritesArticle.findIndex((item: { id: any; }) => item.id === this.state.article.id) !== -1) {
       // Film dans nos favoris
       sourceImage = require('../assets/images/ic_favorite.png')
       shouldEnlarge = true
@@ -103,40 +114,50 @@ class ArticleDetail extends React.Component {
         article.picture = "https://www.icone-png.com/png/29/28894.png"
       }
 
+      if (article.actor == "zinfos974" && article.link[8] ==="m"){
+        console.log(article.link[8])
+        article.link = article.link.slice(0, 8 - 1) 
+            + article.link.slice(10, article.link.length);
+      }
+
       return (
-        <ScrollView style={styles.scrollview_container}>
+        <View style={styles.main_container}>
           <Image
             style={styles.image}
             source={{uri:article.picture}}
           />
-          <Text style={styles.title_text}>{article.title}</Text>
-          <View style={styles.details_container}>
-            <View>
-              <Text style={styles.default_text}>Paru le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
-              <Text style={styles.default_text}>Categorie : {article.category}</Text>
+          <View style={styles.main_content_container}>
+            <Text style={styles.title_text}>{article.title}</Text>
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            <View style={styles.details_container}>
+              <View style={styles.categ_published_container}>
+                <Text style={styles.default_text}>Categorie : {article.category}</Text>
+                <Text style={styles.default_text}>Publié le {moment(article.time*1000).format('DD/MM/YYYY à hh:MM')}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.favorite_container}
+                onPress={() => this._toggleFavorite()}>
+                {this._displayFavoriteImage()}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.share_touchable_headerrightbutton}
+                onPress={() => this._shareArticle()}>
+                <Ionicons name="share" size={40} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.favorite_container}
-              onPress={() => this._toggleFavorite()}>
-              {this._displayFavoriteImage()}
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.share_touchable_headerrightbutton}
-              onPress={() => this._shareArticle()}>
-              <Ionicons name="share" size={40} />
-            </TouchableOpacity>
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+            <Text style={styles.description_text}>{article.description}</Text>
+            <Button
+            // icon={<Icon name='code' color='#ffffff' />}
+            buttonStyle={styles.button}
+            title='Lire tout l&apos;article...'  
+            onPress={() => Linking.openURL(article.link)}/>
+            {/* <Text style={styles.default_text}>Article(s) similaire(s) : {article.genres.map(function(similarArticle){
+                return similarArticle.title;
+              }).join(" / ")}
+            </Text> */}
           </View>
-          <Text style={styles.description_text}>{article.description}</Text>
-          <Button
-          // icon={<Icon name='code' color='#ffffff' />}
-          buttonStyle={styles.button}
-          title='Lire tout l&apos;article...'  
-          onPress={() => Linking.openURL(article.link)}/>
-          {/* <Text style={styles.default_text}>Article(s) similaire(s) : {article.genres.map(function(similarArticle){
-              return similarArticle.title;
-            }).join(" / ")}
-          </Text> */}
-        </ScrollView>
+        </View>
       )
     }
   }
@@ -164,23 +185,30 @@ class ArticleDetail extends React.Component {
   render() {
     console.log(this.props)
     return (
-      <View style={styles.main_container}>
+      <ScrollView style={styles.scrollview_container}>
         {this._displayLoading()}
         {this._displayArticle()}
         {this._displayFloatingActionButton()}
-      </View>
+      </ScrollView>
     )
   }
 }
   
 const styles = StyleSheet.create({
   main_container: {
-    flex: 1
+    flex: 1,
+  },
+  main_content_container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  categ_published_container:{
+    marginLeft:0,
   },
   details_container:{
     flexDirection:'row',
-    alignItems: 'center',
-    justifyContent: 'center'
+    flex:1
   },
   favorite_container: {
     alignItems: 'center', // Alignement des components enfants sur l'axe secondaire, X ici
@@ -200,11 +228,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   scrollview_container: {
-    flex: 1
+    flex: 1,
   },
   image: {
-    height: 169,
-    margin: 5
+    height: 300,
+    borderBottomLeftRadius: 37,
+    borderBottomRightRadius: 37,
   },
   title_text: {
     fontWeight: 'bold',
@@ -220,9 +249,13 @@ const styles = StyleSheet.create({
   },
   description_text: {
     fontStyle: 'italic',
-    color: '#666666',
-    margin: 5,
-    marginBottom: 15
+    color: '#667',
+    flex:1,
+    flexWrap: 'wrap',
+    marginBottom: 15,
+    marginTop: 15,
+    marginLeft: 25,
+    marginRight: 30,
   },
   default_text: {
     marginLeft: 5,
@@ -252,6 +285,11 @@ const styles = StyleSheet.create({
   },
   share_touchable_headerrightbutton: {
     marginRight: 8
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
   },
 })
 

@@ -8,7 +8,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import HomeScreen from '../screens/HomeScreen';
 import ArticleDetailScreen from '../screens/ArticleDetailScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, FavoriteParamList, HomeParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, FavoriteParamList, HomeParamList, SearchParamList, TabTwoParamList } from '../types';
 import SearchScreen from '../screens/SearchScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import { Button } from 'react-native';
@@ -30,10 +30,10 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Recherche"
+        component={SearchNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-search" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -70,20 +70,6 @@ function HomeNavigator() {
         component={ArticleDetailScreen}
         options={{ headerTitle: 'Article' }}
       />
-      <HomeStack.Screen
-        name="SearchScreen"
-        component={SearchScreen}
-        options={{ 
-          headerTitle: 'Recherche',
-          headerRight: () => (
-            <Button
-              onPress={() => alert('This is a button!')}
-              title="Info"
-              color="#fff"
-            />
-          ) 
-        }}
-      />
     </HomeStack.Navigator>
   );
 }
@@ -99,6 +85,25 @@ function TabTwoNavigator() {
         options={{ headerTitle: 'Test' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const SearchStack = createStackNavigator<SearchParamList>();
+
+function SearchNavigator() {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen
+        name="SearchScreen"
+        component={SearchScreen}
+        options={{ headerTitle: 'Recherche' }}
+      />
+      <SearchStack.Screen
+        name="ArticleDetailScreen"
+        component={ArticleDetailScreen}
+        options={{ headerTitle: 'Article' }}
+      />
+    </SearchStack.Navigator>
   );
 }
 

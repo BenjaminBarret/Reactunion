@@ -1,20 +1,28 @@
 import React from 'react'
 import { StyleSheet, TextInput, Button, FlatList, ActivityIndicator } from 'react-native'
-import data from '../constants/ArticleData'
 import ArticleCard from './ArticleCard'
 import { Text, View } from '../components/Themed';
 
 import { getArticlesWithSearchedText, SimilarArticle, Article, getArticlesInTheSpotlight } from '../api/ZactusAPI'
-import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
 import ArticleList from './ArticleList';
 
-class Search extends React.Component {
+interface Props {
+  navigation: any;
+}
+
+interface State {
+  articlesSpotlight:any;
+  articlesSearched:any;
+  isLoading:any;
+}
+
+class Search extends React.Component<Props,State> {
 
   
   searchedText: any;
 
-  constructor(props: {} | Readonly<{}>) {
+  constructor(props: Props) {
     super(props)
     
     this.searchedText;
@@ -29,12 +37,12 @@ class Search extends React.Component {
   // 
   _displayDetailArticle = (idArticle : string) => {
     console.log("Display film with id " + idArticle)
-    this.props.navigation.navigate("ArticleDetailScreen", { idArticle: idArticle})
+    this.props.navigation.navigate("ArticleDetailScreen", { idArticle: idArticle, navigation : this.props.navigation})
   }
 
   // Charge la liste d'articles à la une
   _loadArticlesInTheSpotlight(){
-    this.setState({ isLoading:true })
+    this.setState({ isLoading: true })
 
       getArticlesInTheSpotlight().then(data => {
         this.setState({ 

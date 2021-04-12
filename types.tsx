@@ -8,12 +8,17 @@ export type BottomTabParamList = {
   Accueil: undefined;
   TabTwo: undefined;
   Favoris: undefined;
+  Recherche: undefined;
 };
 
 export type HomeParamList = {
   HomeScreen: undefined;
   ArticleDetailScreen: undefined;
+};
+
+export type SearchParamList = {
   SearchScreen: undefined;
+  ArticleDetailScreen: undefined;
 };
 
 export type TabTwoParamList = {

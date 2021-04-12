@@ -1,6 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
+import ArticlesSpotlight from '../components/ArticlesSpotlight';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import Search from '../components/Search';
@@ -11,7 +12,8 @@ export default function HomeScreen({
   navigation,
 }: StackScreenProps<HomeParamList>) {
   return (
-    <Search navigation={navigation}/>
+    <ArticlesSpotlight navigation={navigation}/>
+    // <Search navigation={navigation}/>
   );
 }
 

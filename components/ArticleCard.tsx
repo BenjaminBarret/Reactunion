@@ -3,9 +3,18 @@ import { StyleSheet, View, Text, ActivityIndicator, Image, Animated, Dimensions 
 import { Button, Card, Icon } from 'react-native-elements'
 import FadeIn from '../animations/FadeIn'
 
-class ArticleCard extends React.Component {
+interface Props {
+  displayDetailArticle: any;
+  article: any;
+  isArticleFavorite: any;
+}
 
-  constructor(props: {} | Readonly<{}>) {
+interface State {
+}
+
+class ArticleCard extends React.Component<Props,State> {
+
+  constructor(props: Props) {
     super(props)
 
   }

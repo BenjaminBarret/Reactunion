@@ -18,9 +18,15 @@ export default {
               TabTwoScreen: 'two',
             },
           },
+          Search: {
+            screens: {
+              SearchScreen: 'search',
+            },
+          },
           Favorite: {
             screens: {
               FavoriteScreen: 'favorite',
+              ArticleDetailScreen: 'article',
             },
           },
         },

@@ -4,9 +4,19 @@ import { connect } from 'react-redux'
 import Navigation from '../navigation'
 import ArticleCard from './ArticleCard'
 
-class ArticleList extends React.Component {
+interface Props {
+  navigation: any;
+  articles: any;
+  favoritesArticle: any;
+}
 
-  constructor(props: {} | Readonly<{}>) {
+interface State {
+  articles:any
+}
+
+class ArticleList extends React.Component<Props, State> {
+
+  constructor(props: Props) {
     super(props)
     this.state = {
       articles: []
@@ -29,7 +39,7 @@ class ArticleList extends React.Component {
         renderItem={({item}) => 
           <ArticleCard 
           article={item} 
-          isArticleFavorite={(this.props.favoritesArticle.findIndex(article => article.id === item.id) !== -1) ? true : false}
+          isArticleFavorite={(this.props.favoritesArticle.findIndex((article: { id: any }) => article.id === item.id) !== -1) ? true : false}
           displayDetailArticle={this._displayDetailArticle}/>
         }
       />

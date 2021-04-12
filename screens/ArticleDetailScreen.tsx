@@ -6,12 +6,12 @@ import ArticleDetail from '../components/ArticleDetail';
 import { Text, View } from '../components/Themed';
 import { HomeParamList } from '../types';
 
-export default function ArticleDetailScreen({ route, navigation }) {
+export default function ArticleDetailScreen({ route } : any) {
 
-  const { idArticle } = route.params;
+  const { idArticle, navigation } = route.params;
 
   return (
-    <ArticleDetail idArticle={route.params.idArticle}/>
+    <ArticleDetail idArticle={idArticle}/>
   );
 
 }

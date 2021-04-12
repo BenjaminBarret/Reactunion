@@ -5,7 +5,15 @@ import { connect } from 'react-redux';
 import ArticleList from '../components/ArticleList';
 import { Text, View } from '../components/Themed';
 
-class FavoriteScreen extends React.Component {
+interface Props {
+  navigation: any;
+  favoritesArticle: any;
+}
+
+interface State {
+}
+
+class FavoriteScreen extends React.Component<Props,State> {
 
   _displayList(){
     if(this.props.favoritesArticle.length != 0 ) {
